@@ -3,24 +3,24 @@
 #include <avr/io.h>
 
 // Edit these
-#define LCD_DDR  DDRF
-#define LCD_PORT PORTF
-#define LCD_RS_DDR  LCD_DDR
-#define LCD_RS_PORT LCD_PORT
-#define LCD_EN_DDR  LCD_DDR
-#define LCD_EN_PORT LCD_PORT
-#define LCD_RW_DDR  LCD_DDR
-#define LCD_RW_PORT LCD_PORT
+#define LCD_DDR  DDRD
+#define LCD_PORT PORTD
+#define LCD_RS_DDR  DDRB
+#define LCD_RS_PORT PORTB
+#define LCD_EN_DDR  LCD_RS_DDR
+#define LCD_EN_PORT LCD_RS_PORT
+#define LCD_RW_DDR  LCD_RS_DDR
+#define LCD_RW_PORT LCD_RS_PORT
 
-#define USE_RW 1
+#define USE_RW 0
 
 #define LCD_RS 0
-#define LCD_RW 1
-#define LCD_EN 2
-#define LCD_D0 3
-#define LCD_D1 4
-#define LCD_D2 5
-#define LCD_D3 6
+#define LCD_RW 0
+#define LCD_EN 1
+#define LCD_D0 4
+#define LCD_D1 5
+#define LCD_D2 6
+#define LCD_D3 7
 
 #define LCD_COL_COUNT 16
 #define LCD_ROW_COUNT 2
