@@ -5,6 +5,14 @@
 // Edit these
 #define LCD_DDR  DDRF
 #define LCD_PORT PORTF
+#define LCD_RS_DDR  LCD_DDR
+#define LCD_RS_PORT LCD_PORT
+#define LCD_EN_DDR  LCD_DDR
+#define LCD_EN_PORT LCD_PORT
+#define LCD_RW_DDR  LCD_DDR
+#define LCD_RW_PORT LCD_PORT
+
+#define USE_RW 1
 
 #define LCD_RS 0
 #define LCD_RW 1

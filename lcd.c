@@ -18,14 +18,43 @@ void lcd_write(uint8_t value) {
   lcd_send(value, 1);
 }
 
+static inline void lcd_set_rs(void) {
+  LCD_RS_PORT |= (1 << LCD_RS);
+}
+
+static inline void lcd_clear_rs(void) {
+  LCD_RS_PORT &= ~(1 << LCD_RS);
+}
+
+static inline void lcd_set_en(void) {
+  LCD_EN_PORT |= (1 << LCD_EN);
+}
+
+static inline void lcd_clear_en(void) {
+  LCD_EN_PORT &= ~(1 << LCD_EN);
+}
+
+static inline void lcd_set_rw(void) {
+#if USE_RW
+  LCD_RW_PORT |= (1 << LCD_RW);
+#endif
+}
+
+static inline void lcd_clear_rw(void) {
+#if USE_RW
+  LCD_RW_PORT &= ~(1 << LCD_RW);
+#endif
+}
+
 void lcd_send(uint8_t value, uint8_t mode) {
+
   if (mode) {
-    LCD_PORT = LCD_PORT | (1 << LCD_RS);
+    lcd_set_rs();
   } else {
-    LCD_PORT = LCD_PORT & ~(1 << LCD_RS);
+    lcd_clear_rs();
   }
 
-  LCD_PORT = LCD_PORT & ~(1 << LCD_RW);
+  lcd_clear_rw();
 
   lcd_write_nibble(value >> 4);
   lcd_write_nibble(value);
@@ -34,30 +63,28 @@ void lcd_send(uint8_t value, uint8_t mode) {
 void lcd_write_nibble(uint8_t nibble) {
   LCD_PORT = (LCD_PORT & 0xff & ~(0x0f << LCD_D0)) | ((nibble & 0x0f) << LCD_D0);
 
-  LCD_PORT = LCD_PORT & ~(1 << LCD_EN);
-  LCD_PORT = LCD_PORT | (1 << LCD_EN);
-  LCD_PORT = LCD_PORT & ~(1 << LCD_EN);
+  lcd_clear_en();
+  lcd_set_en();
+  lcd_clear_en();
   _delay_ms(0.04);
 }
 
 void lcd_init(void) {
   // Configure pins as output
   LCD_DDR = LCD_DDR
-    | (1 << LCD_RS)
-    | (1 << LCD_RW)
-    | (1 << LCD_EN)
     | (1 << LCD_D0)
     | (1 << LCD_D1)
     | (1 << LCD_D2)
     | (1 << LCD_D3);
+  LCD_RS_DDR |= (1 << LCD_RS);
+  LCD_EN_DDR |= (1 << LCD_EN);
 
   // Wait for LCD to become ready (docs say 15ms+)
   _delay_ms(15);
 
-  LCD_PORT = LCD_PORT
-    & ~(1 << LCD_EN)
-    & ~(1 << LCD_RS)
-    & ~(1 << LCD_RW);
+  lcd_clear_rs();
+  lcd_clear_en();
+  lcd_clear_rw();
 
   _delay_ms(4.1);
 
